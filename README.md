@@ -11,84 +11,19 @@
  1. Download .hex files and remaining files from the repository.
  
  2. Design the circuit as shown here: 
-                  ![circuit](/images/1.1png)
+                  ![circuit](/images/1.1.PNG)
                   
- 3. As you can see in the above figure, we have our Arduino UNO board along with LCD and Heart Beat Sensor.
  
- 4. There’s also a Button attached to Pin # 2, so when we press this button our Arduino will start counting the Heart Beat and will update  it on the LCD.
- 
- 5. Code: 
-      ```
-      #include <LiquidCrystal.h>
-#include <TimerOne.h>
-LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
+4. Download the code from repo.
 
-int HBSensor = 4;
-int HBCount = 0;
-int HBCheck = 0;
-int TimeinSec = 0;
-int HBperMin = 0;
-int HBStart = 2;
-int HBStartCheck = 0;
+5. In this code, We have used a TimerOne Library which creates an interrupt after every 1sec.
 
-void setup() {
-  lcd.begin(20, 4);
-  pinMode(HBSensor, INPUT);
-  pinMode(HBStart, INPUT_PULLUP);
-  Timer1.initialize(800000); 
-  Timer1.attachInterrupt( timerIsr );
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Current HB  : ");
-  lcd.setCursor(0,1);
-  lcd.print("Time in Sec : ");
-  lcd.setCursor(0,2);
-  lcd.print("HB per Min  : 0.0");
-}
+6. So, when TimeinSec will become equal to 10 then I am simply multiplying it with 6 and updating it on the LCD.
 
-void loop() {
-  if(digitalRead(HBStart) == LOW)
-  {
-	  lcd.setCursor(0,3);lcd.print("HB Counting ..");HBStartCheck = 1;
-  }
-  if(HBStartCheck == 1)
-  {
-      if((digitalRead(HBSensor) == HIGH) && (HBCheck == 0))
-      {
-        HBCount = HBCount + 1;
-        HBCheck = 1;
-        lcd.setCursor(14,0);
-        lcd.print(HBCount);
-        lcd.print(" ");
-      }
-      if((digitalRead(HBSensor) == LOW) && (HBCheck == 1))
-      {
-        HBCheck = 0;   
-      }
-      if(TimeinSec == 10)
-      {
-          HBperMin = HBCount * 6;
-          HBStartCheck = 0;
-          lcd.setCursor(14,2);
-          lcd.print(HBperMin);
-          lcd.print(" ");
-          lcd.setCursor(0,3);
-          lcd.print("Press Button again.");
-          HBCount = 0;
-          TimeinSec = 0;      
-      }
-  }
-}
+7. So, use the above code and get your Hex File from Arduino Software and update it in your Proteus Simulation.
 
-void timerIsr()
-{
-  if(HBStartCheck == 1)
-  {
-      TimeinSec = TimeinSec + 1;
-      lcd.setCursor(14,1);
-      lcd.print(TimeinSec);
-      lcd.print(" ");
-  }
-}
+8. Now run your Proteus Simulation, Now click this HB button and it will start counting the HB as well as will count the Time in seconds.
 
-      ```
+9. Change the value of variable resistance connected to Heart Beat sensor, to show different BPM at the results.
+
+### This is simple demonstration of working of HeartBeat Monitor using Arduino UNO in Proteus ISIS.
